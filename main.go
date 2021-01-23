@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"math/big"
-    "os"
+	"os"
 
 	"github.com/gakonst/optimism-tx-format/ovm"
 
@@ -25,30 +25,30 @@ var executionManager = common.HexToAddress("0x2222222222222222222222222222222222
 var stateManager = common.HexToAddress("0x3333333333333333333333333333333333333333")
 
 func debug(msg ovm.Message) {
-    // these remain the same
-    fmt.Printf("From: %+v\n", msg.From().Hex())
-    fmt.Printf("GasPrice: %+v\n", msg.GasPrice().Int64())
-    fmt.Printf("Value: %+v\n", msg.Value().Int64())
-    fmt.Printf("L1 Msg Sender: %+v\n", msg.L1MessageSender().Hex())
-    fmt.Printf("L1 Block number: %+v\n", msg.L1BlockNumber().Int64())
-    fmt.Printf("Queue Origin: %+v\n", msg.QueueOrigin().Int64())
-    fmt.Printf("Nonce: %+v\n", msg.Nonce())
+	// these remain the same
+	fmt.Printf("From: %+v\n", msg.From().Hex())
+	fmt.Printf("GasPrice: %+v\n", msg.GasPrice().Int64())
+	fmt.Printf("Value: %+v\n", msg.Value().Int64())
+	fmt.Printf("L1 Msg Sender: %+v\n", msg.L1MessageSender().Hex())
+	fmt.Printf("L1 Block number: %+v\n", msg.L1BlockNumber().Int64())
+	fmt.Printf("Queue Origin: %+v\n", msg.QueueOrigin().Int64())
+	fmt.Printf("Nonce: %+v\n", msg.Nonce())
 
-    // these changes due to the mods
-    fmt.Printf("To: %+v\n", msg.To().Hex())
-    fmt.Printf("Data: %+v\n", common.ToHex(msg.Data()))
-    fmt.Printf("Gas: %+v\n", msg.Gas())
+	// these changes due to the mods
+	fmt.Printf("To: %+v\n", msg.To().Hex())
+	fmt.Printf("Data: %+v\n", common.ToHex(msg.Data()))
+	fmt.Printf("Gas: %+v\n", msg.Gas())
 
 	fmt.Println()
 }
 
 func main() {
-    emAbiJson, err := os.Open("./em.json")
-    if err != nil {
-        panic(err)
-    }
-    defer emAbiJson.Close()
-    emAbi, err := abi.JSON(emAbiJson)
+	emAbiJson, err := os.Open("./em.json")
+	if err != nil {
+		panic(err)
+	}
+	defer emAbiJson.Close()
+	emAbi, err := abi.JSON(emAbiJson)
 
 	tx := types.NewTransaction(
 		// normal Ethereum args
@@ -89,7 +89,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    fmt.Println("Message w/o OVM modding:")
+	fmt.Println("Message w/o OVM modding:")
 	debug(msg)
 
 	// The OVM message will have a populated data field with the compressed
@@ -99,7 +99,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    fmt.Println("OVM Message modded to pass through the Sequencer Entrypoint:")
+	fmt.Println("OVM Message modded to pass through the Sequencer Entrypoint:")
 	debug(ovmMsg)
 
 	// Finally, when the transaction gets through the Execution Manager it will be
@@ -119,6 +119,6 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-    fmt.Println("OVM Message modded to pass through the Execution Manager:")
+	fmt.Println("OVM Message modded to pass through the Execution Manager:")
 	debug(emMsg)
 }
